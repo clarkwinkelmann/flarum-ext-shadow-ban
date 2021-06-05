@@ -8,7 +8,12 @@ use Flarum\User\User;
 
 class PostPolicy extends AbstractPolicy
 {
-    public function shadowHide(User $actor, Post $post)
+    /**
+     * @param User $actor
+     * @param Post|string $post Post model or ::class
+     * @return bool
+     */
+    public function shadowHide(User $actor, $post = '')
     {
         return $actor->hasPermission('clarkwinkelmann-shadow-ban.hide');
     }

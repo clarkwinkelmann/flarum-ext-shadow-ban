@@ -7,7 +7,12 @@ use Flarum\User\User;
 
 class UserPolicy extends AbstractPolicy
 {
-    public function shadowBan(User $actor, User $user)
+    /**
+     * @param User $actor
+     * @param User|string $user User model or ::class
+     * @return bool
+     */
+    public function shadowBan(User $actor, $user = '')
     {
         return $actor->hasPermission('clarkwinkelmann-shadow-ban.ban');
     }

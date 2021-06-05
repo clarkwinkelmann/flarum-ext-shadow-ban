@@ -8,7 +8,12 @@ use Flarum\User\User;
 
 class DiscussionPolicy extends AbstractPolicy
 {
-    public function shadowHide(User $actor, Discussion $discussion)
+    /**
+     * @param User $actor
+     * @param Discussion|string $discussion Discussion model or ::class
+     * @return bool
+     */
+    public function shadowHide(User $actor, $discussion = '')
     {
         return $actor->hasPermission('clarkwinkelmann-shadow-ban.hide');
     }
