@@ -21,7 +21,8 @@
     ],
     "support": {
         "issues": "https://github.com/clarkwinkelmann/flarum-ext-shadow-ban/issues",
-        "source": "https://github.com/clarkwinkelmann/flarum-ext-shadow-ban"
+        "source": "https://github.com/clarkwinkelmann/flarum-ext-shadow-ban",
+        "forum": "https://discuss.flarum.org/d/27555"
     },
     "autoload": {
         "psr-4": {
@@ -37,6 +38,9 @@
                 "backgroundColor": "#684ba6",
                 "color": "#fff"
             }
+        },
+        "flagrow": {
+            "discuss": "https://discuss.flarum.org/d/27555"
         }
     }
 }
