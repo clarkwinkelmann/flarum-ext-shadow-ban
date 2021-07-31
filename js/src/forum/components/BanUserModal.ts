@@ -74,8 +74,6 @@ export default class BanUserModal extends Modal {
                         // @ts-ignore
                         const to = dayjs().add(days, 'days').add(12, 'hours');
 
-                        console.log(days, from, to);
-
                         active = untilDayjs.isAfter(from) && untilDayjs.isBefore(to);
                     }
 
