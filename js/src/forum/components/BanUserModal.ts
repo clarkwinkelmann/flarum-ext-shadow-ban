@@ -20,6 +20,12 @@ export default class BanUserModal extends Modal {
 
         let until = this.attrs.user.attribute('shadowBannedUntil');
 
+        // In case the database column ends up as 0000-00-00 00:00:00, the Carbon output will have a minus sign in front
+        // We need to ignore this value because DayJS can't handle it
+        if (typeof until === 'string' && until && until[0] === '-') {
+            until = null;
+        }
+
         if (until) {
             // If date is in the past behave the same way as if the user wasn't shadow banned
             if (new Date() > new Date(until)) until = null;
