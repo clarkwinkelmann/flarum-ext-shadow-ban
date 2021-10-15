@@ -8,9 +8,13 @@ use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
 use Flarum\Extend;
+use Flarum\Mentions\Notification\PostMentionedBlueprint;
+use Flarum\Mentions\Notification\UserMentionedBlueprint;
+use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Post\CommentPost;
 use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\Post\Post;
+use Flarum\Subscriptions\Notification\NewPostBlueprint;
 use Flarum\User\Event\Saving as UserSaving;
 use Flarum\User\User;
 
@@ -59,4 +63,17 @@ return [
         ->attributes(PostAttributes::class),
     (new Extend\ApiSerializer(UserSerializer::class))
         ->attributes(UserAttributes::class),
+
+    (new Extend\Notification())
+        ->beforeSending(function (BlueprintInterface $blueprint, array $recipients): array {
+            // Silence flarum/mentions and flarum/subscriptions notifications about hidden posts
+            // flarum/mentions already checks whether the recipient can see the post, but we still want to silence mentions to moderators as well
+            if ($blueprint instanceof PostMentionedBlueprint || $blueprint instanceof UserMentionedBlueprint || $blueprint instanceof NewPostBlueprint) {
+                if (!is_null($blueprint->post->shadow_hidden_at)) {
+                    return [];
+                }
+            }
+
+            return $recipients;
+        }),
 ];
