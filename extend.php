@@ -8,6 +8,7 @@ use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Saving as DiscussionSaving;
 use Flarum\Extend;
+use Flarum\Post\CommentPost;
 use Flarum\Post\Event\Saving as PostSaving;
 use Flarum\Post\Post;
 use Flarum\User\Event\Saving as UserSaving;
@@ -36,10 +37,19 @@ return [
         ->modelPolicy(Post::class, Policy\PostPolicy::class)
         ->modelPolicy(User::class, Policy\UserPolicy::class),
 
+    (new Extend\ModelPrivate(Discussion::class))
+        ->checker(function (Discussion $discussion) {
+            return !is_null($discussion->shadow_hidden_at);
+        }),
+    (new Extend\ModelPrivate(CommentPost::class))
+        ->checker(function (Post $post) {
+            return !is_null($post->shadow_hidden_at);
+        }),
+
     (new Extend\ModelVisibility(Discussion::class))
-        ->scope(Scope\ViewDiscussion::class),
+        ->scope(Scope\ViewPrivateDiscussion::class, 'viewPrivate'),
     (new Extend\ModelVisibility(Post::class))
-        ->scope(Scope\ViewPost::class),
+        ->scope(Scope\ViewPrivatePost::class, 'viewPrivate'),
     (new Extend\ModelVisibility(User::class))
         ->scope(Scope\ViewUser::class),
 
