@@ -10,6 +10,7 @@ import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import PostControls from 'flarum/forum/utils/PostControls';
 import UserControls from 'flarum/forum/utils/UserControls';
 import CommentPost from 'flarum/forum/components/CommentPost';
+import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 import BanUserModal from './components/BanUserModal';
 
 app.initializers.add('clarkwinkelmann-shadow-ban', () => {
@@ -115,6 +116,15 @@ app.initializers.add('clarkwinkelmann-shadow-ban', () => {
                     })
                 );
             }
+        }
+    });
+
+    extend(DiscussionListItem.prototype, 'elementAttrs', function (this: DiscussionListItem, attrs: any) {
+        // @ts-ignore missing type-hint in Flarum
+        const {discussion} = this.attrs;
+
+        if (discussion.attribute('isShadowHidden')) {
+            attrs.className = (attrs.className || '') + ' DiscussionListItem--hidden DiscussionListItem--shadow-hidden';
         }
     });
 });
